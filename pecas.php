@@ -83,7 +83,7 @@ $nome = $_SESSION['nome'];
                     <?php
                     include 'conecta.php';
 
-                    $sql = "SELECT * FROM pecas ORDER BY nome";
+                    $sql = "SELECT codigo, nome, marca, modelo, descricao, DATE_FORMAT(data_entrada,'%d / %m / %Y') as data_entrada FROM pecas ORDER by nome;";
                     $consulta = $pdo->query($sql);
                     $listapecas = $consulta->fetchAll(PDO::FETCH_ASSOC);
 
@@ -104,7 +104,7 @@ $nome = $_SESSION['nome'];
                         echo "<tbody>";
 
                         foreach ($listapecas as $item) {
-                            $id = $item['id'];
+                            $codigo = $item['codigo'];
                             echo "<tr>";
                             echo "<td>" . htmlspecialchars($item['codigo']) . "</td>";
                             echo "<td>" . htmlspecialchars($item['nome']) . "</td>";
@@ -112,12 +112,12 @@ $nome = $_SESSION['nome'];
                             echo "<td>" . htmlspecialchars($item['modelo']) . "</td>";
                             echo "<td>" . htmlspecialchars($item['descricao']) . "</td>";
                             echo "<td>" . htmlspecialchars($item['data_entrada']) . "</td>";
-                            echo "<td><a href='#' data-bs-toggle='modal' data-bs-target='#modalEditar' data-id='$id'><svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'>
+                            echo "<td><a href='#' data-bs-toggle='modal' data-bs-target='#modalEditar' data-id='$codigo'><svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'>
   <path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/>
   <path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/>
-</svg></a> | <a href='excluir.php?id=$id'><svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-trash3' viewBox='0 0 16 16'>
+</svg></a> | <a href='excluir.php?id=$codigo'><svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-trash3' viewBox='0 0 16 16'>
   <path d='M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5'/>
-</svg></a></td>echo </tr>";
+</svg></a></td> </tr>";
                         }
 
                         echo "</tbody>";
@@ -153,10 +153,10 @@ $nome = $_SESSION['nome'];
             </div>
 
             <div class="modal-body">
-                <form action="pecas.php" method="POST">
-                <label class="form-label">CÓDIGO</label>
+                <form action="cadastropecas.php" method="POST">
+                <!-- <label class="form-label">CÓDIGO</label>
                 <input type="text" name="nome" class="form-control" required/>
-                <br/> 
+                <br/>  -->
                 <label class="form-label">NOME</label>
                 <input type="text" name="nome" class="form-control" required/>
                 <br/> 
@@ -196,7 +196,7 @@ $nome = $_SESSION['nome'];
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
            <div class="modal-body">
-           <form action="pecas.php" method="POST">
+           <form action="editar_pecas.php" method="POST">
                 <label class="form-label">CÓDIGO</label>
                 <input type="text" name="nome" class="form-control" required/>
                 <br/> 
