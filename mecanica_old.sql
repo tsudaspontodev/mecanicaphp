@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 14/05/2026 às 03:21
+-- Tempo de geração: 13/05/2026 às 03:33
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -65,13 +65,6 @@ CREATE TABLE `pecas` (
   `data_entrada` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `pecas`
---
-
-INSERT INTO `pecas` (`codigo`, `nome`, `marca`, `modelo`, `descricao`, `data_entrada`) VALUES
-(1, 'nome 1', 'marca 1', 'modelo 1', 'descrição 1', '2026-05-13');
-
 -- --------------------------------------------------------
 
 --
@@ -106,7 +99,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `cpf`, `funcao`, `genero`, `login`, `senha`) VALUES
-(1, 'marcos', '12312312312', 'admin', 'Masculino', 'admin', 'admin');
+(1, 'marcos', '12312312312', 'developer', 'Masculino', 'admin', 'admin');
 
 --
 -- Índices para tabelas despejadas
@@ -162,7 +155,7 @@ ALTER TABLE `orden_servicos`
 -- AUTO_INCREMENT de tabela `pecas`
 --
 ALTER TABLE `pecas`
-  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `servicos`
