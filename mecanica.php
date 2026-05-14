@@ -21,6 +21,12 @@
             .header {
                 float: right;
             }
+
+            .texto-destaque {
+                font-size:24px;
+                color: #005B74;
+                font-weight: bold;
+            }
         </style>
     </head>
     <body>
@@ -45,5 +51,37 @@
                 include 'menu.php';
             ?>
         </nav>
+        <br>
+        <div class = "container">
+            <div class = "row">
+                <div class = "col-md-6 mb-4">
+                    <div class = "card shadow border-2">
+                        <div class = "card-header bg-gray border-botton py-3">
+                            <span class = "texto-destaque"> ORDENS DE SERVIÇOS </span>
+
+                        </div>
+                            <div class= "card-body">
+                                Odens de Serviços
+                            </div>
+                    </div>
+
+                </div>
+
+                <div class = "col-md-6 mb-4">
+                    <div class = "card shadow border-2">
+                        <div class = "card-header bg-gray border-botton py-3">
+                            <span class = "texto-destaque"> ORDENS DE SERVIÇOS </span>
+
+                        </div>
+                            <div class= "card-body">
+                                Odens de Serviços
+                            </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
     </body>
 </html>
