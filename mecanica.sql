@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 14/05/2026 às 03:21
+-- Tempo de geração: 16/05/2026 às 03:15
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -29,8 +29,13 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `ordens` (
   `id` int(11) NOT NULL,
+  `nome_cliente` varchar(180) NOT NULL,
+  `cpf` varchar(25) NOT NULL,
+  `veiculo` varchar(100) NOT NULL,
+  `placa` varchar(15) NOT NULL,
   `data_entrada` datetime NOT NULL,
-  `data_saida` datetime NOT NULL
+  `data_saida` datetime NOT NULL,
+  `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -42,10 +47,6 @@ CREATE TABLE `ordens` (
 CREATE TABLE `orden_servicos` (
   `id` int(11) NOT NULL,
   `id_orden` int(11) NOT NULL,
-  `nome_cliente` varchar(180) NOT NULL,
-  `cpf` varchar(20) NOT NULL,
-  `veiculo` varchar(150) NOT NULL,
-  `placa` varchar(7) NOT NULL,
   `tipo_servico` varchar(150) NOT NULL,
   `pecas` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -70,7 +71,8 @@ CREATE TABLE `pecas` (
 --
 
 INSERT INTO `pecas` (`codigo`, `nome`, `marca`, `modelo`, `descricao`, `data_entrada`) VALUES
-(1, 'nome 1', 'marca 1', 'modelo 1', 'descrição 1', '2026-05-13');
+(2, 'peça 2', 'marca peça 2', 'modelo peça 2', 'descrição peca 2', '2026-05-15'),
+(3, 'peça 3', 'marca peça 3', 'modelo peça 3', 'descrição peça 3', '2026-05-14');
 
 -- --------------------------------------------------------
 
@@ -162,7 +164,7 @@ ALTER TABLE `orden_servicos`
 -- AUTO_INCREMENT de tabela `pecas`
 --
 ALTER TABLE `pecas`
-  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `servicos`
