@@ -15,6 +15,6 @@
     $stmt->bindParam(':descricao', $descricao, PDO::PARAM_STR);
     $stmt->bindParam(':data_entrada', $data_entrada, PDO::PARAM_STR);
     $stmt->execute();
-    header("Location: mecanica.php"); 
+    header("Location: pecas.php"); 
     exit;
 ?>

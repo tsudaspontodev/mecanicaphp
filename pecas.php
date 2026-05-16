@@ -24,7 +24,7 @@ $nome = $_SESSION['nome'];
 
     <style>
         body {
-            background-color:white
+            background-color: white;
         }
 
         .header {
@@ -35,13 +35,11 @@ $nome = $_SESSION['nome'];
 
 <body>
 
-<!-- HEADER -->
 <div class="container-fluid" style="background-color:#DCDCDC; text-align:center; position:relative;">
-    <img src="Imagens/banner.png" alt="Logo" width="50%" heigth="50%">
+    <img src="Imagens/banner.png" alt="Logo" width="50%" height="50%">
 
     <div class="header" style="position:absolute; top:10px; right:10px;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-            class="bi bi-person-gear" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-gear" viewBox="0 0 16 16">
             <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
         </svg>
 
@@ -51,30 +49,25 @@ $nome = $_SESSION['nome'];
 </div>
 
 <nav>
-            <?php
-                include 'menu.php';
-            ?>
-        </nav>
+    <?php include 'menu.php'; ?>
+</nav>
 
-<!-- BOTÃO -->
 <div class="text-center my-3">
     <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
         CADASTRAR PEÇA
     </button>
 </div>
 
-<!-- TABELA -->
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8 mb-4">
 
             <div class="card shadow border-2">
                 <div class="card-header">
-                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
-  <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-  <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
-</svg>
-
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
+                        <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                        <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+                    </svg>
                     <b>PEÇAS CADASTRADAS</b>
                 </div>
 
@@ -83,7 +76,7 @@ $nome = $_SESSION['nome'];
                     <?php
                     include 'conecta.php';
 
-                    $sql = "SELECT codigo, nome, marca, modelo, descricao, DATE_FORMAT(data_entrada,'%d / %m / %Y') as data_entrada FROM pecas ORDER by nome;";
+                    $sql = "SELECT codigo, nome, marca, modelo, descricao, DATE_FORMAT(data_entrada,'%Y-%m-%d') as data_original, DATE_FORMAT(data_entrada,'%d / %m / %Y') as data_entrada FROM pecas ORDER by nome;";
                     $consulta = $pdo->query($sql);
                     $listapecas = $consulta->fetchAll(PDO::FETCH_ASSOC);
 
@@ -98,6 +91,7 @@ $nome = $_SESSION['nome'];
                                     <th>MODELO</th>
                                     <th>DESCRIÇÃO</th>
                                     <th>DATA ENTRADA</th>
+                                    <th>AÇÕES</th>
                                 </tr>
                               </thead>";
 
@@ -105,6 +99,9 @@ $nome = $_SESSION['nome'];
 
                         foreach ($listapecas as $item) {
                             $codigo = $item['codigo'];
+                            // Guardamos a data no formato Y-m-d para o input date do modal funcionar corretamente
+                            $data_formatada_input = $item['data_original']; 
+                            
                             echo "<tr>";
                             echo "<td>" . htmlspecialchars($item['codigo']) . "</td>";
                             echo "<td>" . htmlspecialchars($item['nome']) . "</td>";
@@ -112,12 +109,11 @@ $nome = $_SESSION['nome'];
                             echo "<td>" . htmlspecialchars($item['modelo']) . "</td>";
                             echo "<td>" . htmlspecialchars($item['descricao']) . "</td>";
                             echo "<td>" . htmlspecialchars($item['data_entrada']) . "</td>";
-                            echo "<td><a href='#' data-bs-toggle='modal' data-bs-target='#modalEditar' data-id='$codigo'><svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'>
-  <path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/>
-  <path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/>
-</svg></a> | <a href='excluir_peca.php?id=$codigo'><svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-trash3' viewBox='0 0 16 16'>
-  <path d='M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5'/>
-</svg></a></td> </tr>";
+                            echo "<td>
+                                    <a href='#' data-bs-toggle='modal' data-bs-target='#modalEditar' data-id='$codigo'><svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></a> | 
+                                    <a href='excluir_peca.php?codigo=$codigo' onclick=\"return confirm('Tem certeza que deseja excluir?')\"><svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-trash3' viewBox='0 0 16 16'><path d='M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5'/></svg></a>
+                                  </td>";
+                            echo "</tr>";
                         }
 
                         echo "</tbody>";
@@ -135,70 +131,62 @@ $nome = $_SESSION['nome'];
     </div>
 </div>
 
-<!-- JS Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- MODAL -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-
         <div class="modal-content">
-
             <div class="modal-header">
-            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
-  <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-  <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
-</svg>&nbsp; &nbsp; <h5 class="modal-title">CADASTRO DE PEÇAS</h5>
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
+                    <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                    <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+                </svg>&nbsp; &nbsp; <h5 class="modal-title">CADASTRO DE PEÇAS</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body">
                 <form action="cadastropecas.php" method="POST">
-                <label class="form-label">CÓDIGO</label>
-                <input type="text" name="nome" class="form-control" required/>
-                <br/> 
-                <label class="form-label">NOME</label>
-                <input type="text" name="nome" class="form-control" required/>
-                <br/> 
-                <label class="form-label">MARCA</label>
-                <input type="text" name="marca" class="form-control" required/>
-                <br/> 
-                <label class="form-label">MODELO</label>
-                <input type="text" name="modelo" class="form-control" required/>
-                <br/> 
-                <label class="form-label">DESCRIÇÃO</label>
-                <input type="text" name="descricao" class="form-control" required/>
-                <br/> 
-                <label class="form-label">DATA ENTRADA</label>
-                <input type="date" name="data_entrada" class="form-control" required/>
-                <br>
-                <button type="submit" class="btn btn-outline-success">CADASTRAR </button>    
+                    <!-- <label class="form-label">CÓDIGO</label> -->
+                    <input type="hidden" name="codigo" class="form-control" required/> <br/> 
+                    <input type="hidden" id="edit_codigo" name= "codigo">   
+                    <label class="form-label">NOME</label>
+                    <input type="text" name="nome" class="form-control" required/>
+                    <br/> 
+                    <label class="form-label">MARCA</label>
+                    <input type="text" name="marca" class="form-control" required/>
+                    <br/> 
+                    <label class="form-label">MODELO</label>
+                    <input type="text" name="modelo" class="form-control" required/>
+                    <br/> 
+                    <label class="form-label">DESCRIÇÃO</label>
+                    <input type="text" name="descricao" class="form-control" required/>
+                    <br/> 
+                    <label class="form-label">DATA ENTRADA</label>
+                    <input type="date" name="data_entrada" class="form-control" required/>
+                    <br>
+                    <button type="submit" class="btn btn-outline-success">CADASTRAR </button>    
                 </form>
             </div>
             <div class="modal-footer">  
                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">FECHAR</button>
-                
             </div>
-
         </div>
-
     </div>
 </div>
-<!-- Janela modal - editar peças-->
-<div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-      <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
-  <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-  <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
-</svg>&nbsp; &nbsp; <h5 class="modal-title" id="modalEditar">EDIÇÃO DE PEÇAS</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-           <div class="modal-body">
+        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
+            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+            <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+        </svg>&nbsp; &nbsp; <h5 class="modal-title">EDIÇÃO DE PEÇAS</h5> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
            <form action="editar_pecas.php" method="POST">
-                <input type="hidden" id="edit_codigo" name= "codigo">
-                <label class="form-label">NOME</label>
+                
+           <input type="hidden" id="edit_codigo" name="codigo"> <label class="form-label">NOME</label>
                 <input type="text" name="nome" class="form-control" id="edit_nome" required/>
                 <br/> 
                 <label class="form-label">MARCA</label>
@@ -214,34 +202,32 @@ $nome = $_SESSION['nome'];
                 <input type="date" name="data_entrada" class="form-control" id="edit_data_entrada" required/>
                 <br>
                 <button type="submit" class="btn btn-outline-success">ATUALIZAR </button>    
-                </form>
-           </div>
-        <div class="modal-footer">
+           </form>
+      </div>
+      <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
+
 <script>
     document.getElementById('modalEditar').addEventListener('show.bs.modal', function (event) {
         let button = event.relatedTarget;
         let codigo = button.getAttribute('data-id');
-        // Aqui você pode usar o ID para buscar os dados da pessoa e preencher o formulário de edição
+        
         fetch('buscar_peca.php?codigo=' + codigo)
             .then(response => response.json())
             .then(data => {
-                // Preencha os campos do formulário com os dados retornados
-                document.getElementById('edit_codigo').value = data.codigo; // Supondo que você tenha um campo oculto para o ID
+                // CORRIGIDO: Atribuindo o código ao campo oculto para o UPDATE funcionar
+                document.getElementById('edit_codigo').value = codigo; 
                 document.getElementById('edit_nome').value = data.nome;
                 document.getElementById('edit_marca').value = data.marca;
                 document.getElementById('edit_modelo').value = data.modelo;
                 document.getElementById('edit_descricao').value = data.descricao;
                 document.getElementById('edit_data_entrada').value = data.data_entrada;
-                
-                // document.querySelector('#modalEditar input[name="nome"]').value = data.nome;
-                // document.querySelector('#modalEditar input[name="cpf"]').value = data.cpf;
-                // document.querySelector('#modalEditar input[name="celular"]').value = data.celular;
-            });
+            })
+            .catch(error => console.error('Erro ao buscar dados:', error));
     });
 </script>
 
